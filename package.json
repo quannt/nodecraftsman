@@ -8,7 +8,11 @@
   },
   "author": "quannt",
   "license": "ISC",
-  "devDependencies":{
-  	"jasmine-node":""
+  "devDependencies": {
+    "jasmine-node": "",
+    "request": ""
+  },
+  "dependencies": {
+    "async": "^1.5.2"
   }
 }
