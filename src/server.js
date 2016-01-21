@@ -16,10 +16,9 @@ http.createServer(function(request, response){
 		'value': Math.floor(Math.random() * 100)
 	};
 
-	setTimeout(function(){
-		response.writeHead(200, {"Content-Type":"application/json"});
-		response.end(JSON.stringify(result));
-	}, 2000 + Math.floor(Math.random() * 1000));
+	response.writeHead(200, {"Content-Type": "application/json"});
+    response.end(JSON.stringify(result));
+
 
 }).listen(
 	8080,

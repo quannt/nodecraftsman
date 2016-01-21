@@ -3,27 +3,32 @@
 var request = require('request');
 var async = require('async');
 
-var name, status;
+var url = 'http://localhost:8080/';
 
-var getUsername = function(callback){
-	request.get('http://localhost:8080/getUserName?id=1234',
-	function(err, res, body){
-		var result = JSON.parse(body);
-		name = result.value;
-		callback(err, result.value);
-	});
-};
+async.waterfall([
 
-var getUserStatus = function(callback){
-	request.get(
-		'http://localhost:8080/getUserStatus?id=1234',
-		function(err, res, body){
-		var result = JSON.parse(body);
-		status = result.value;
-		callback(err, result.value);
-	});
-};
+	function(callback){
+		request.get(url + 'getSessionId', function(err, res, body){
+			callback(null, JSON.parse(body).value);
+		});
+	},
 
-async.parallel([getUsername, getUserStatus], function (err, results){
-	console.log('The status of user', results[0], 'is', results[1]);
-});
+	function(sId, callback){
+		request.get(url + 'getUserId?sessionId=' + sId, function(err, res, body){
+			callback(null, sId, JSON.parse(body).value);
+		});
+	},
+
+	function(sId, uId, callback){
+		request.get(url + 'getUserName?userId=' + uId, function(err, res, body){
+			callback(null, JSON.parse(body).value, sId);
+		});
+	}
+	
+	],
+
+	function(err, name, sId){
+		console.log('Name:', name);
+		console.log('SessionID:', sId);
+	}
+);
